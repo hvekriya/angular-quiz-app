@@ -7,10 +7,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private quizStore: DataService,
-    private spinner: NgxSpinnerService
-  ) {}
   quiz = [];
   questionNo = 0;
   question = [];
@@ -18,11 +14,16 @@ export class AppComponent implements OnInit {
   quizOver = false;
   answerMode = false;
   correctAns = false;
+
+  constructor(
+    private quizStore: DataService,
+    private spinner: NgxSpinnerService
+  ) {}
   ngOnInit() {}
   start() {
     this.spinner.show();
     // Get the questions from the store
-    this.quizStore.getQuiz().then(res => {
+    this.quizStore.getQuiz().subscribe(res => {
       this.quiz = res.questions;
       this.question = this.quiz[this.questionNo].answers;
       this.inProgress = false;
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit {
     const index = (<HTMLInputElement>(
       document.querySelector('input[name="answer"]:checked')
     )).value;
-    this.quizStore.answerQuestion(id, index).then(res => {
+    this.quizStore.answerQuestion(id, index).subscribe(res => {
       console.log(res);
       this.spinner.hide();
     });
@@ -63,4 +64,5 @@ export class AppComponent implements OnInit {
     this.inProgress = true;
     this.quizOver = false;
   }
+  ngOnDestroy() {}
 }

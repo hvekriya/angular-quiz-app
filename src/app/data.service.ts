@@ -1,4 +1,20 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+interface Question {
+  id: string;
+  answers: Answer[];
+}
+
+interface Quiz {
+  id: string;
+  questions: Question[];
+}
+
+interface Answer {
+  index: string;
+  text: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +27,13 @@ export class DataService {
    *
    * Latency can be high (up to 3000ms).
    */
-  getQuiz = () => {
-    return new Promise((resolve, reject) => {
+  public getQuiz(): Observable<Quiz> {
+    return new Observable(observer => {
       setTimeout(() => {
-        resolve(this._generateQuiz());
-      }, this._randomInt(3000));
+        observer.next(this.generateQuiz());
+      }, this.randomInt(3000));
     });
-  };
+  }
 
   /**
    * Mocks sending a response to the server.
@@ -25,67 +41,67 @@ export class DataService {
    * Latency can be very high (up to 8000ms).
    * Failure is also likely (10% of calls fail).
    */
-  answerQuestion = (questionId, answerIndex) => {
-    return new Promise((resolve, reject) => {
+  answerQuestion = (questionId: string, answerIndex) => {
+    return new Observable(observer => {
       setTimeout(() => {
-        if (this._randomInt(10) < 10) {
-          resolve();
+        if (this.randomInt(10) < 10) {
+          observer.complete
         } else {
-          reject();
+          observer.error
         }
-      }, this._randomInt(8000));
+      }, this.randomInt(8000));
     });
   };
 
-  _generateQuiz = () => {
-    const quiz = {
-      id: this._generateString(this.ALPHANUMERIC, 8),
-      questions: []
+  private generateQuiz(): Quiz {
+    const quiz: Quiz = {
+      id: this.generateString(this.ALPHANUMERIC, 8),
+      questions: new Array<Question>()
     };
     for (let i = 8; i > 0; i--) {
-      quiz.questions.push(this._generateQuestion());
+      quiz.questions.push(this.generateQuestion());
     }
     return quiz;
-  };
+  }
 
-  _generateQuestion = () => {
-    const answers = [];
+  private generateQuestion(): Question {
+    const answers = new Array<Answer>();
     for (let index = 3; index >= 0; index--) {
-      let length = this._randomInt(20);
+      let length = this.randomInt(20);
       answers.push({
-        index,
-        text: this._generatePseudoSentence(20)
+        index: '' + index,
+        text: this.generatePseudoSentence(20)
       });
     }
     return {
-      id: this._generateString(this.ALPHANUMERIC, 9),
+      id: this.generateString(this.ALPHANUMERIC, 9),
       answers
     };
-  };
+  }
 
-  ALPHANUMERIC = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(
+  private ALPHANUMERIC = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split(
     ''
   );
 
-  _generateString = (chars, length) => {
+  private generateString(chars, length): string {
     let id = '';
     for (let i = length; i > 0; i--) {
-      id += chars[this._randomInt(chars.length) - 1];
+      id += chars[this.randomInt(chars.length) - 1];
     }
     return id;
-  };
+  }
 
-  _generatePseudoSentence = num => {
+  generatePseudoSentence = num => {
     const LETTERS = 'abcdefghiklmnopqrstuvwxyz'.split('');
-    const words = [];
+    const words = new Array<string>();
     for (let i = num; i > 0; i--) {
-      let length = this._randomInt(9);
-      words.push(this._generateString(LETTERS, length));
+      let length = this.randomInt(9);
+      words.push(this.generateString(LETTERS, length));
     }
     return words.join(' ');
   };
 
-  _randomInt = max => {
+  private randomInt(max: number): number {
     return Math.ceil(Math.random() * max);
-  };
+  }
 }
