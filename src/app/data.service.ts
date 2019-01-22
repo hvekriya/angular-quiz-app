@@ -43,13 +43,12 @@ export class DataService {
    */
   answerQuestion = (questionId: string, answerIndex) => {
     return new Observable(observer => {
-      setTimeout(() => {
-        if (this.randomInt(10) < 10) {
-          observer.complete
-        } else {
-          observer.error
-        }
-      }, this.randomInt(8000));
+      console.log(answerIndex);
+      if (answerIndex == 0) {
+        observer.next('Correct question');
+      } else {
+        observer.error('Wrong question');
+      }
     });
   };
 

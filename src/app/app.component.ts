@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit {
   quizOver = false;
   answerMode = false;
   correctAns = false;
+  answerIndex = '';
 
   constructor(
     private quizStore: DataService,
@@ -34,12 +36,9 @@ export class AppComponent implements OnInit {
   }
   checkAnswer() {
     this.answerMode = true;
-    // this.spinner.show();
+    this.spinner.show();
     const id = this.quiz[this.questionNo].id;
-    const index = (<HTMLInputElement>(
-      document.querySelector('input[name="answer"]:checked')
-    )).value;
-    this.quizStore.answerQuestion(id, index).subscribe(res => {
+    this.quizStore.answerQuestion(id, this.answerIndex).subscribe(res => {
       console.log(res);
       this.spinner.hide();
     });

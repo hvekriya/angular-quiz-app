@@ -5,7 +5,8 @@
       <h2 id="question">Question {{questionNo + 1}}</h2>
       <ul id="options">
         <div *ngFor="let item of question; let i = index">
-          <input class="form-check-input" type="radio" name="answer" value="{{item.index}}" checked>
+          <input class="form-check-input" type="radio" name="answer" value="{{item.index}}" [(ngModel)]="answerIndex"
+            checked>
           <label class="form-check-label" for="exampleRadios1">
             {{item.text}}
           </label>
