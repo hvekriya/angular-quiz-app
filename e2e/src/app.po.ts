@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, $$ } from 'protractor';
 
 export class AppPage {
   navigateTo() {
@@ -6,6 +6,27 @@ export class AppPage {
   }
 
   getTitleText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.css('.intro h1')).getText();
+  }
+
+  getStartButton() {
+    return element(by.id('startQuiz')).isPresent();
+  }
+
+  startQuiz() {
+    return element(by.id('startQuiz')).click();
+  }
+
+  getQuestionText() {
+    return element(by.id('question')).getText();
+  }
+
+  getAnswerOptions() {
+    // Trying the $$ shortcut
+    return $$('#options div').count();
+  }
+
+  getSubmitButton() {
+    return element(by.buttonText('Submit')).isPresent();
   }
 }
