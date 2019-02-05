@@ -1,4 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
+<h1 class="title">TassomaiApp</h1>
+
 <div style="text-align:center">
   <div class="quiz-area" [hidden]="inProgress">
     <div [hidden]="quizOver">
@@ -37,7 +39,7 @@
   </div>
 
   <div class="intro" [hidden]="!inProgress">
-    <h1>Welcome to the Quiz App</h1>
+    <h1 class="greeting">Welcome to the Quiz App</h1>
     <button id="startQuiz" (click)="start()" class="btn btn-success">Start the Quiz</button>
   </div>
 
